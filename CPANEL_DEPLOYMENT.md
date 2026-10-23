@@ -176,4 +176,4 @@ Ask the provider for the correct PHP CLI path if `/usr/local/bin/php` is not val
 - Frontend assets: Vite; the deployable assets are generated into `public/build` by `npm run build`.
 - Writable paths: `storage` and `bootstrap/cache`.
 - Public uploads: product images use Laravel's public storage disk, so `php artisan storage:link` is required.
-- The checked-in README has older Laravel 12/PHP 8.2 setup notes. Follow the current `composer.json` and this guide for deployment requirements.
+- The README covers local setup. Use this guide for production-specific server, database, mail, and deployment configuration.

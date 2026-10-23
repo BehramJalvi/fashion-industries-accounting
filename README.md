@@ -1,19 +1,18 @@
-# Fashion Industries INC — Laravel accounting & inventory (Phases 3–13)
+# Fashion Industries INC — Accounting & Inventory
 
-Requires: Laravel 12, PHP 8.2+, MySQL 8+ (Laragon's MySQL 8 recommended; the journal-line CHECK needs MySQL 8.0.16+).
+A Laravel 13 accounting and inventory application. It requires PHP 8.3 or newer, Composer, and Node.js/npm. MySQL 8.0.16+ (or a compatible MariaDB release) is recommended for production; local development defaults to SQLite.
 
-## Install into a fresh Laravel 12 project
-1. Copy `app/ config/ database/ resources/ routes/ tests/` over the project (this REPLACES `app/Models/User.php`,
-   `app/Http/Controllers/Controller.php`, `routes/web.php`, `database/seeders/DatabaseSeeder.php`).
-2. `bootstrap/providers.php` — add `App\Providers\AccessServiceProvider::class,`
-3. `bootstrap/app.php` — inside `->withMiddleware(...)` add:
-   `$middleware->alias(['active' => \App\Http\Middleware\EnsureUserIsActive::class]);`
-4. `.env` — set MySQL credentials, then (recommended) the first logins:
-   `ADMIN_EMAIL=...  ADMIN_PASSWORD=...  ACCOUNTANT_EMAIL=...  ACCOUNTANT_PASSWORD=...`
-   (If left blank, random passwords are generated and printed once by the seeder. No default password exists.)
-5. `php artisan migrate --seed`
-6. `php artisan storage:link` (product images), then `php artisan serve` → http://127.0.0.1:8000/login
-7. Optional: `php artisan test` (uses SQLite in-memory by default).
+## Get started
+
+1. Clone this repository and enter its directory.
+2. Run `composer run setup`. This installs dependencies, creates `.env` and the local SQLite database when missing, generates the application key, runs migrations, and builds the frontend.
+3. Run `php artisan db:seed` to create the initial roles, accounts, settings, and users. The default admin and accountant emails are in `.env.example`. Set unique `ADMIN_PASSWORD` and `ACCOUNTANT_PASSWORD` values in `.env` before seeding if desired; otherwise, the seeder generates passwords and prints them once.
+4. Run `php artisan storage:link` to enable product image uploads.
+5. Run `php artisan serve` and open [http://127.0.0.1:8000/login](http://127.0.0.1:8000/login).
+
+For MySQL, configure the `DB_*` values in `.env` before running setup. Never commit `.env` or production credentials.
+
+For cPanel deployment, see [CPANEL_DEPLOYMENT.md](CPANEL_DEPLOYMENT.md).
 
 ## Phase 4 contents
 - Login/logout with per-email+IP throttling (5 tries), generic failure message, session regeneration, inactive users blocked (also mid-session).
@@ -183,5 +182,6 @@ Requires: Laravel 12, PHP 8.2+, MySQL 8+ (Laragon's MySQL 8 recommended; the jou
 - Money cards need `reports.view`; a role with only `dashboard.view` sees stock warnings, drafts and the recent lists its permissions allow.
 - Works on an empty installation (no accounts, no data).
 
-## Untested here
-Written without a PHP runtime. Run `php artisan migrate:fresh --seed` and `php artisan test` first and report any failure.
+## Tests
+
+Run `php artisan test`. The suite uses an in-memory SQLite database by default.
